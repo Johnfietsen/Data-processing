@@ -1,0 +1,113 @@
+Luc Stefelmanns
+10669124
+
+<!DOCTYPE html>
+
+<html>
+    <canvas id="weather_graph" width="500" height="300">
+    </canvas>
+    <script type="text/javascript">
+
+        // THIS VERSION TRIES TO OPEN THE FILE LOCALLY, BUT THIS DOESN'T WORK
+        // AND I DON'T KNOW WHY, OTHER VERSION SHOWS I WAS ABLE TO CREATE A GRAPH
+
+        function create_transform(domain, range)
+        {
+            // formulas to calculate the alpha and the beta
+            var alpha = (range[1] - range[0]) / (domain[1] - domain[0])
+            var beta = range[1] - alpha * domain[1]
+
+            // returns the function for the linear transformation y = a * x + b
+            return function(x)
+            {
+              return alpha * x + beta;
+            }
+        }
+
+        // source: https://www.w3schools.com/xml/xml_http.asp
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function()
+        {
+            if (this.readyState == 4 && this.status == 200) {
+               var weather_data = xhttp.responseText;
+               var data_list = weather_data.value.split('\n');
+
+               // list to fill date and temperature information
+               var dates = [];
+               var temps = [];
+               for (var i = 1; i < data_list.length - 1; i ++)
+               {
+                   // split date information at comma and remove spacebards
+                   var info = data_list[i].split(',');
+                   info[0] = info[0].replace(/\s/g, '');
+                   info[1] = parseInt(info[1].replace(/\s/g, ''));
+
+                   // create list to join again with '-' for correct formatting
+                   var date_list = [0, 0, 0];
+                   date_list[0] = info[0].slice(0, 4);
+                   date_list[1] = info[0].slice(4, 6);
+                   date_list[2] = info[0].slice(6,8);
+                   var date = date_list.join('-');
+
+                   // fill list with dates and fill list with temperatures
+                   dates.push(new Date(date));
+                   temps.push(info[1]);
+               }
+
+               // change dates into miliseconds since begin date
+               var start_time = dates[0].getTime();
+               for (var i = 0; i < dates.length; i ++)
+               {
+                   dates[i] = dates[i].getTime() - start_time
+               }
+
+               // initialize canvas element
+               var canvas = document.getElementById('weather_graph');
+               var ctx = canvas.getContext('2d');
+
+               // find min and max temperatures for correct scale of graph
+               var min_temp = temps[0];
+               var max_temp = temps[0];
+               for (var i = 0; i < temps.length; i ++)
+               {
+                   if (min_temp > temps[i])
+                   {
+                       min_temp = temps[i];
+                   }
+                   if (max_temp < temps[i])
+                   {
+                       max_temp = temps[i];
+                   }
+               }
+
+               // create transform graph for x and y axis
+               var transform_x = create_transform([0, dates[dates.length - 1]],
+                                                  [0, canvas.width]);
+               var transform_y = create_transform([min_temp, max_temp],
+                                                  [0, canvas.height]);
+
+               // draw y axis
+               ctx.moveTo(0, 0);
+               ctx.lineTo(0, canvas.height);
+
+               // draw x axis at 0 celcius
+               ctx.moveTo(0, canvas.height - transform_y(0))
+               ctx.lineTo(canvas.width, canvas.height - transform_y(0));
+
+               // draw graph of temperatures
+               ctx.moveTo(transform_x(dates[0]), transform_y(temps[0]));
+               for (var i = 1; i < dates.length; i ++)
+               {
+                   ctx.lineTo(transform_x(dates[i]),
+                              canvas.height - transform_y(temps[i]));
+               }
+
+               // execute drawing
+               ctx.stroke()
+            }
+        };
+        xhttp.open("GET", "data.html", true);
+        xhttp.send();
+
+    </script>
+</html>

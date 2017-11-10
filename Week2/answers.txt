@@ -1,0 +1,18 @@
+Explain the difference between the == operator and the === operator:
+    == also takes type conversion into account (None == Undefined is true).
+    === does not, meaning they are only equal if the type of object is the same
+        (None === Undefined is false).
+
+Explain what a closure is:
+    It is a way to make a variable local (instead of global). It means turning
+    a variable into a function in which private variables can be used.
+
+Explain what higher order functions are:
+    Higher order functions are functions that takes a function as an argument,
+    or returns a function.
+
+Explain what a query selector is and give an example line of JavaScript that
+uses a query selector:
+    A query selector returns the first element that matches the given selector.
+    Example:
+        document.querySelector(".example");
