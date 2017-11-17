@@ -1,4 +1,4 @@
-Course:       Data_Processing
+Course:       Data Processing
 
 Name:         L.K. Stefelmanns
 
