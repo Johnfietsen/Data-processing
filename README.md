@@ -1,3 +1,5 @@
-Course:       Data_Processing\n
-Name:         L.K. Stefelmanns\n
+Course:       Data_Processing
+
+Name:         L.K. Stefelmanns
+
 GitHub pages: https://Johnfietsen.github.io/Data_Processing
