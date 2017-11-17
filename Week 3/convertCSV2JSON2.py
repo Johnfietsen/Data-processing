@@ -20,18 +20,19 @@ def convert_CSV_to_JSON(csv_input):
 
     tmp_list = []
     JSON_list = []
+    title_list = []
 
     for line in csv_input:
         tmp_list.append(line.split(','))
 
-    title_one = str(tmp_list[0][0])
-    title_two = str(tmp_list[0][1])
-
     for i in range(1, len(tmp_list) - 1):
-        if tmp_list[i][0].endswith('\n'):
-            url = url[:-2]
-        JSON_list.append({title_one : tmp_list[i][0],
-                          title_two : tmp_list[i][1]})
+        JSON_list.append({})
+
+    for i in range(len(tmp_list[0])):
+        title_list.append(str(tmp_list[0][i]).strip('\n'))
+
+        for j in range(1, len(tmp_list) - 1):
+            JSON_list[j][title_list[i]] = tmp_list[j][i].strip('\n')
 
     JSON_data = json.loads(json.dumps(JSON_list))
 
