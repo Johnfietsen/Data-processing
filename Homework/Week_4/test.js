@@ -6,17 +6,30 @@
 //  Study:    Minor Programming, University of Amsterdam
 ////////////////////////////////////////////////////////////////////////////////
 
-var SPACE = 12,
+// var SPACE = 12,
+//
+//     W_COLOR = 21,
+//     H_COLOR = 29,
+//     X_COLOR = 13,
+//
+//     OFFSET = 34,
+//     H_TEXT = H_COLOR,
+//     FONT_SIZE = 20,
+//     FONT = "Verdana",
+//     X_TEXT = 173;
 
-    W_COLOR = 21,
-    H_COLOR = 29,
-    X_COLOR = 13,
+var FONT = "Verdana",
+    FONT_SIZE = 10,
 
-    OFFSET = 34,
-    H_TEXT = H_COLOR,
-    FONT_SIZE = 20,
-    FONT = "Verdana",
-    X_TEXT = 173;
+    SPACE = 0.5 * FONT_SIZE,
+    OFFSET = 1.1 * FONT_SIZE + SPACE,
+
+    W_COLOR = FONT_SIZE,
+    H_COLOR = 1.5 * FONT_SIZE,
+    X_COLOR = FONT_SIZE,
+
+    H_TEXT = H_COLOR
+    X_TEXT = 9 * FONT_SIZE;
 
 json = {"legend" : [
             {"color" : "#ccece6", "text" : "100"},
