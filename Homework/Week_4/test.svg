@@ -11,8 +11,8 @@
 <rect id="kleur1" x="13" y="13.5" class="st1" width="21" height="29"/>
 <rect id="kleur2" x="13" y="56.9" class="st1" width="21" height="29"/>
 <rect id="kleur3" x="13" y="96.8" class="st1" width="21" height="29"/>
+<rect id="tekst1" x="46.5" y="13.5" class="st2" width="119.1" height="29"/>
 <rect id="tekst2" x="46.5" y="56.9" class="st2" width="119.1" height="29"/>
 <rect id="tekst3" x="46.5" y="96.8" class="st2" width="119.1" height="29"/>
 <rect id="tekst4" x="46.5" y="138.7" class="st2" width="119.1" height="29"/>
-<rect id="tekst1" x="46.5" y="13.5" class="st2" width="119.1" height="29"/>
 </svg>
