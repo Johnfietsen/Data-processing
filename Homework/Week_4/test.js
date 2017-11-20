@@ -6,28 +6,51 @@
 //  Study:    Minor Programming, University of Amsterdam
 ////////////////////////////////////////////////////////////////////////////////
 
-rects = {"colors" : [
-             {"id" : "kleur4", "y" : 138.7, "color" : "#ccece6"},
-             {"id" : "kleur5", "y" : 180.6, "color" : "#99d8c9"},
-             {"id" : "kleur6", "y" : 222.5, "color" : "#66c2a4"}],
-         "numbers" : [
-             {"id" : "tekst5", "y" : 180.6},
-             {"id" : "tekst6", "y" : 222.5}
-         ]
-        };
+var SPACE = 12,
+
+    W_COLOR = 21,
+    H_COLOR = 29,
+    X_COLOR = 13,
+
+    OFFSET = 34,
+    H_TEXT = H_COLOR,
+    FONT_SIZE = 20,
+    FONT = "Verdana",
+    X_TEXT = 173;
+
+json = {"legend" : [
+            {"color" : "#ccece6", "text" : "100"},
+            {"color" : "#99d8c9", "text" : "1,000"},
+            {"color" : "#66c2a4", "text" : "10,000"},
+            {"color" : "#41ae76", "text" : "100,000"},
+            {"color" : "#238b45", "text" : "1,000,000"},
+            {"color" : "#005824", "text" : "10,000,000"},
+            {"color" : "#d3d3d3", "text" : "Unknow Data"}]
+       };
 
 
 d3.xml("test.svg", "image/svg+xml", function(error, xml) {
     if (error) throw error;
     document.body.appendChild(xml.documentElement);
 
-    d3.select("#Laag_1").selectAll(".st1").data(rects.colors).enter()
+    d3.select("#Laag_1").selectAll(".st1").data(json.legend).enter()
         .append("rect")
-        .attr("id", rects.colors.id)
+        .attr("id", function(d, i) { return "kleur" + i; })
         .attr("class", "st1")
-        .attr("x", 13)
-        .attr("y", rects.colors.y)
-        .attr("width", 21)
-        .attr("height", 29)
-        .attr("fill", rects.colors.color);
+        .attr("x", X_COLOR)
+        .attr("y", function(d, i) { return SPACE + i * (H_COLOR + SPACE); })
+        .attr("width", W_COLOR)
+        .attr("height", H_COLOR)
+        .style("fill", function(d, i) { return json.legend[i].color; });
+
+    d3.select("#Laag_1").selectAll(".st2").data(json.legend).enter()
+        .append("text")
+        .attr("id", function(d, i) { return "text" + i; })
+        .attr("class", "st2")
+        .attr("x", X_TEXT)
+        .attr("y", function(d, i) { return OFFSET + i * (H_TEXT + SPACE); })
+        .text(function(d, i) { return json.legend[i].text})
+        .attr("font-family", FONT)
+        .attr("font-size", FONT_SIZE)
+        .attr("text-anchor", "end");
 });
