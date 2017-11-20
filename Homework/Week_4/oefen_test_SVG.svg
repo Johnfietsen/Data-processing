@@ -8,16 +8,25 @@
 	.st2{fill:none;stroke:#1E1E1C;stroke-miterlimit:10;}
 </style>
 <rect id="canvas" x="1.8" y="1.8" class="st0" width="175.1" height="291.4"/>
-<rect id="kleur1" x="13" y="13.5" class="st1" width="21" height="29"/>
-<rect id="kleur2" x="13" y="56.9" class="st1" width="21" height="29"/>
-<rect id="kleur3" x="13" y="96.8" class="st1" width="21" height="29"/>
-<rect id="kleur4" x="13" y="96.8" class="st1" width="21" height="29"/>
-<rect id="kleur5" x="13" y="96.8" class="st1" width="21" height="29"/>
-<rect id="kleur6" x="13" y="96.8" class="st1" width="21" height="29"/>
-<rect id="tekst1" x="46.5" y="13.5" class="st2" width="119.1" height="29"/>
+<rect id="kleur1" x="13" y="13.5" class="st1" width="21" height="29" style="fill:#ccece6"/>
+<rect id="kleur2" x="13" y="56.9" class="st1" width="21" height="29" style="fill:#99d8c9"/>
+<rect id="kleur3" x="13" y="96.8" class="st1" width="21" height="29" style="fill:#66c2a4"/>
+<rect id="kleur4" x="13" y="138.7" class="st1" width="21" height="29" style="fill:#41ae76"/>
+<rect id="kleur5" x="13" y="180.6" class="st1" width="21" height="29" style="fill:#238b45"/>
+<rect id="kleur6" x="13" y="222.5" class="st1" width="21" height="29" style="fill:#005824"/>
+<rect id="kleur7" x="13" y="264.4" class="st1" width="21" height="29" style="fill:#d3d3d3"/>
+<rect id="tekst1" x="46.5" y="13.5" class="st2" width="119.1" height="29" />
+<text x="46.5" y="34.5" font-family="Verdana" font-size="20" fill="black">100</text>
 <rect id="tekst2" x="46.5" y="56.9" class="st2" width="119.1" height="29"/>
+<text x="46.5" y="75.9" font-family="Verdana" font-size="20" fill="black">1000</text>
 <rect id="tekst3" x="46.5" y="96.8" class="st2" width="119.1" height="29"/>
+<text x="46.5" y="115.8" font-family="Verdana" font-size="20" fill="black">10000</text>
 <rect id="tekst4" x="46.5" y="138.7" class="st2" width="119.1" height="29"/>
-<rect id="tekst5" x="46.5" y="138.7" class="st2" width="119.1" height="29"/>
-<rect id="tekst6" x="46.5" y="138.7" class="st2" width="119.1" height="29"/>
+<text x="46.5" y="157.7" font-family="Verdana" font-size="20" fill="black">100000</text>
+<rect id="tekst5" x="46.5" y="180.6" class="st2" width="119.1" height="29"/>
+<text x="46.5" y="199.6" font-family="Verdana" font-size="20" fill="black">1000000</text>
+<rect id="tekst6" x="46.5" y="222.5" class="st2" width="119.1" height="29"/>
+<text x="46.5" y="241.5" font-family="Verdana" font-size="20" fill="black">10000000</text>
+<rect id="tekst7" x="46.5" y="264.4" class="st2" width="119.1" height="29"/>
+<text x="46.5" y="283.4" font-family="Verdana" font-size="20" fill="black">No Data</text>
 </svg>
