@@ -6,27 +6,64 @@
 //  Study:    Minor Programming, University of Amsterdam
 ////////////////////////////////////////////////////////////////////////////////
 
-d3.xml("test.svg", "image/svg+xml", function(error, xml) {
+
+var width = 960,
+    height = 500;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([20, width], .1);
+
+var y = d3.scale.linear()
+    .range([height + 20, 0]);
+
+var chart = d3.select(".chart")
+    .attr("width", width)
+    .attr("height", height);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+//Import dataset
+d3.json("scatterplot.json", function(error, data){
     if (error) throw error;
-    document.body.appendChild(xml.documentElement);
+    x.domain(data.map(function(d) { return d.COtwo; }));
+    y.domain([0, d3.max(data, function(d) { return d.GDP_growth; })]);
 
-    d3.select("#Laag_1").selectAll(".st1").data(json.legend).enter()
-        .append("rect")
-        .attr("id", function(d, i) { return "kleur" + i; })
-        .attr("class", "st1")
-        .attr("x", X_COLOR)
-        .attr("y", function(d, i) { return SPACE + i * (H_COLOR + SPACE); })
-        .attr("width", W_COLOR)
-        .attr("height", H_COLOR)
-        .style("fill", function(d, i) { return json.legend[i].color; });
+    var bar = chart.selectAll("g")
+        .data(data)
+      .enter().append("g")
+        .attr("transform", function(d) {
+                                        return "translate(" + x(d.COtwo) + ",0)";
+                                        });
 
-    d3.select("#Laag_1").selectAll(".st2").data(json.legend).enter()
-        .append("text")
-        .attr("id", function(d, i) { return "text" + i; })
-        .attr("class", "st2")
-        .attr("x", X_TEXT)
-        .attr("y", function(d, i) { return OFFSET + i * (H_TEXT + SPACE); })
-        .text(function(d, i) { return json.legend[i].text})
-        .attr("font-family", FONT)
-        .attr("font-size", FONT_SIZE)
-        .attr("text-anchor", "end");
+    chart.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    chart.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+    bar.append("rect")
+        .attr("y", function(d) { return y(d.GDP_growth); })
+        .attr("height", function(d) { return height - y(d.GDP_growth); })
+        .attr("width", x.rangeBand());
+
+    bar.append("text")
+        .attr("x", x.rangeBand() / 2)
+        .attr("y", function(d) { return y(d.GDP_growth) + 3; })
+        .attr("dy", ".75em")
+        .text(function(d) { return d.GDP_growth; });
+  });
+
+
+function type(d) {
+    d.GDP_growth = +d.GDP_growth; // coerce to number
+    return d;
+}
