@@ -6,17 +6,6 @@
 //  Study:    Minor Programming, University of Amsterdam
 ////////////////////////////////////////////////////////////////////////////////
 
-// var SPACE = 12,
-//
-//     W_COLOR = 21,
-//     H_COLOR = 29,
-//     X_COLOR = 13,
-//
-//     OFFSET = 34,
-//     H_TEXT = H_COLOR,
-//     FONT_SIZE = 20,
-//     FONT = "Verdana",
-//     X_TEXT = 173;
 
 var FONT = "Verdana",
     FONT_SIZE = 10,

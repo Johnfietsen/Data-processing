@@ -6,33 +6,27 @@
 //  Study:    Minor Programming, University of Amsterdam
 ////////////////////////////////////////////////////////////////////////////////
 
-//source: https://gist.github.com/iwek/7154706
-function tsvJSON(tsv){
+d3.xml("test.svg", "image/svg+xml", function(error, xml) {
+    if (error) throw error;
+    document.body.appendChild(xml.documentElement);
 
-  var lines=tsv.split("\n");
+    d3.select("#Laag_1").selectAll(".st1").data(json.legend).enter()
+        .append("rect")
+        .attr("id", function(d, i) { return "kleur" + i; })
+        .attr("class", "st1")
+        .attr("x", X_COLOR)
+        .attr("y", function(d, i) { return SPACE + i * (H_COLOR + SPACE); })
+        .attr("width", W_COLOR)
+        .attr("height", H_COLOR)
+        .style("fill", function(d, i) { return json.legend[i].color; });
 
-  var result = [];
-
-  var headers=lines[0].split("\t");
-
-  for(var i=1;i<lines.length;i++){
-
-	  var obj = {};
-	  var currentline=lines[i].split("\t");
-
-	  for(var j=0;j<headers.length;j++){
-		  obj[headers[j]] = currentline[j];
-	  }
-
-	  result.push(obj);
-
-  }
-
-  //return result; //JavaScript object
-  return JSON.stringify(result); //JSON
-}
-
-
-CO2_json = tsvJSON('../Datasets/CO2_emissions.tsv');
-
-console.log(CO2_json);
+    d3.select("#Laag_1").selectAll(".st2").data(json.legend).enter()
+        .append("text")
+        .attr("id", function(d, i) { return "text" + i; })
+        .attr("class", "st2")
+        .attr("x", X_TEXT)
+        .attr("y", function(d, i) { return OFFSET + i * (H_TEXT + SPACE); })
+        .text(function(d, i) { return json.legend[i].text})
+        .attr("font-family", FONT)
+        .attr("font-size", FONT_SIZE)
+        .attr("text-anchor", "end");
