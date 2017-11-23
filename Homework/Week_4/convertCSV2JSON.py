@@ -38,11 +38,20 @@ def convert_CSV_to_JSON(csv_input1, csv_input2, csv_input3, csv_input4):
 
 
     for i in range(5, len(tmp_list4) - 1):
-        JSON_list.append({'country_name' : tmp_list1[i][0].strip('\"'),
-                          'COtwo' : tmp_list1[i][58].strip('\"'),
-                          'GDP_growth' : tmp_list2[i][58].strip('\"'),
-                          'GDP' : tmp_list3[i][58].strip('\"'),
-                          'income_category' : tmp_list4[i][2].strip('\"')})
+
+        # if tmp_list4[i][2] is '':
+        #     tmp_list4[i][2] = 'Unknown'
+
+        if (tmp_list1[i][0].strip('\"') is not '' and
+           tmp_list1[i][58].strip('\"') is not '' and
+           tmp_list3[i][58].strip('\"') is not '' and
+           tmp_list4[i][2].strip('\"') is not ''):
+
+            JSON_list.append({'country_name' : tmp_list1[i][0].strip('\"'),
+                              'COtwo' : tmp_list1[i][58].strip('\"'),
+                              'GDP_growth' : tmp_list2[i][58].strip('\"'),
+                              'GDP_total' : tmp_list3[i][58].strip('\"'),
+                              'income_category' : tmp_list4[i][2].strip('\"')})
 
 
     JSON_data = json.loads(json.dumps(JSON_list))
