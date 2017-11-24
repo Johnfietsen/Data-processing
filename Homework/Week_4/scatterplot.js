@@ -61,7 +61,7 @@ window.onload = function(){
         d.GDP_total = +d.GDP_total;
       });
 
-
+      // assigning domains to functions
       x.domain(d3.extent(data, function(d) { return d.GDP_growth; })).nice();
       y.domain(d3.extent(data, function(d) { return d.COtwo; })).nice();
       z.domain(d3.extent(data, function(d) { return d.GDP_total; })).nice();
