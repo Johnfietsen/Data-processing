@@ -15,7 +15,7 @@ data.
 import csv
 import json
 
-
+# opens the 4 datasets used
 input1 = open('C:/Users/lucst/Desktop/Minor programmeren/GitHub/Data_Processing/Homework/Datasets/CO2_emissions.csv', 'r')
 input2 = open('C:/Users/lucst/Desktop/Minor programmeren/GitHub/Data_Processing/Homework/Datasets/GDP_growth.csv', 'r')
 input3 = open('C:/Users/lucst/Desktop/Minor programmeren/GitHub/Data_Processing/Homework/Datasets/GDP_total.csv', 'r')
@@ -23,12 +23,16 @@ input4 = open('C:/Users/lucst/Desktop/Minor programmeren/GitHub/Data_Processing/
 
 def convert_CSV_to_JSON(csv_input1, csv_input2, csv_input3, csv_input4):
 
+    # initializes temporary lists to place elements in
     tmp_list1 = []
     tmp_list2 = []
     tmp_list3 = []
     tmp_list4 = []
+
+    # initializes the JSON that will be returned (list of dicts)
     JSON_list = []
 
+    # split elements (based on comma) and put into list
     for line in csv_input1:
         tmp_list1.append(line.split(','))
     for line in csv_input2:
@@ -38,18 +42,17 @@ def convert_CSV_to_JSON(csv_input1, csv_input2, csv_input3, csv_input4):
     for line in csv_input4:
         tmp_list4.append(line.split(','))
 
-
+    # iterate over the elements of the temporary lists and extract data
     for i in range(5, len(tmp_list4) - 1):
 
-        # if tmp_list4[i][2] is '':
-        #     tmp_list4[i][2] = 'Unknown'
-
+        # filter empty entries and countries with small GDP
         if (tmp_list1[i][0].strip('\"') is not '' and
            tmp_list1[i][58].strip('\"') is not '' and
            tmp_list3[i][58].strip('\"') is not '' and
            float(tmp_list3[i][58].strip('\"')) > 200000000000 and
            tmp_list4[i][2].strip('\"') is not ''):
 
+           # append one dictionary per country with data
            JSON_list.append({'country_name' : tmp_list1[i][0].strip('\"'),
                              'COtwo' : tmp_list1[i][58].strip('\"'),
                              'GDP_growth' : tmp_list2[i][58].strip('\"'),
@@ -57,6 +60,7 @@ def convert_CSV_to_JSON(csv_input1, csv_input2, csv_input3, csv_input4):
                              'income_category' : tmp_list4[i][2].strip('\"')})
 
 
+    # dumps and loads to create JSOn file
     JSON_data = json.loads(json.dumps(JSON_list))
 
     return JSON_data
