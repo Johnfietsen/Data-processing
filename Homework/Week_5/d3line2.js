@@ -1,0 +1,201 @@
+//
+//  d3line.js
+//
+//  Author:   L.K. Stefelmanns
+//  Course:   Data processing
+//  Study:    Minor Programming, University of Amsterdam
+//
+//  Sources:
+//	https://bl.ocks.org/basilesimon/29efb0e0a43dde81985c20d9a862e34e
+//	https://stackoverflow.com/questions/38687588/add-horizontal-crosshair-to-d3-js-chart
+//	https://bl.ocks.org/d3noob/119a138ef9bd1d8f0a8d57ea72355252
+//	http://bl.ocks.org/d3noob/e99a762017060ce81c76
+
+window.onload = function(){
+
+    RESCALE = 1 / 10;
+
+    // set the dimensions and margins of the graph
+    var margin = {top: 20, right: 20, bottom: 30, left: 50},
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+    // parse the date / time
+    var parseTime = d3.timeParse("%Y%m%d");
+
+	// assign colors to income category with an ordinal scale
+	var color = d3.scaleOrdinal()
+		.range(["steelblue", "orange	"])
+		.domain(["1994", "2004"]);
+
+    // set the ranges
+    var x = d3.scaleTime().range([0, width]);
+    var y = d3.scaleLinear().range([height, 0]);
+
+    // define the line
+    var average = d3.line()
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.ave_temp); });
+
+    // define the area
+    var area = d3.area()
+        .x(function(d) { return x(d.date); })
+        .y0(function(d) { return y(d.min_temp); })
+        .y1(function(d) { return y(d.max_temp); });
+
+    // append the svg object to the body of the page
+    // appends a 'group' element to 'svg'
+    // moves the 'group' element to the top left margin
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+	// create transparent rectangle to track mouse movement
+	var trans_rect = svg.append("rect")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("width", width)
+		.attr("height", height)
+		.attr("fill", "white")
+		.attr("opacity", 0);
+
+	// create vertical line for crosshair
+	var vert_line = svg.append("line")
+	    .attr("opacity", 0)
+	    .attr("y1", 0)
+	    .attr("y2", height)
+	    .attr("stroke", "black")
+	    .attr("stroke-width", 1);
+	    // .attr("pointer-events", "none");
+
+	// create horizontal line for crosshair
+	var hori_line = svg.append("line")
+	    .attr("opacity", 0)
+	    .attr("x1", 0)
+	    .attr("x2", width)
+	    .attr("stroke", "black")
+	    .attr("stroke-width", 1);
+	    // .attr("pointer-events", "none");
+
+    // Get the data
+    d3.json("KNMI_data.json", function(error, data) {
+        if (error) throw error;
+
+        // format the data
+        data.forEach(function(d) {
+            d.date = parseTime(d.date);
+            d.ave_temp = +d.ave_temp * RESCALE;
+            d.min_temp = +d.min_temp * RESCALE;
+            d.max_temp = +d.max_temp * RESCALE;
+        });
+
+        // sort years ascending
+        data.sort(function(a, b){
+            return a["date"]-b["date"];
+        })
+
+		// Nest the entries by year
+		var dataNest = d3.nest()
+			.key(function(d) {return d.year;})
+			.entries(data);
+
+        // Scale the range of the data
+        x.domain(d3.extent(data, function(d) { return d.date; }));
+        y.domain([d3.min(data, function(d) {
+                    return Math.min(d.ave_temp, d.min_temp, d.max_temp); }),
+                  d3.max(data, function(d) {
+                    return Math.max(d.ave_temp, d.min_temp, d.max_temp); })]);
+
+	    legendSpace = width/dataNest.length; // spacing for the legend
+
+	    // Loop through each symbol / key
+	    dataNest.forEach(function(d,i) {
+
+	        svg.append("path")
+	            .attr("class", "line")
+	            .style("stroke", function() { // Add the colours dynamically
+	                return d.color = color(d.year); })
+	            .attr("id", 'tag'+d.year) // assign ID
+	            .attr("d", average(d.values));
+
+			// add the area
+	        svg.append("path")
+	            .data([data])
+	            .attr("class", "area")
+	            .style("fill", function() {
+					return d.color = color(d.year);	})
+	            .style("opacity", "0.4")
+	            .attr("d", area);
+
+	        // Add the Legend
+	        svg.append("text")
+	            .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
+	            .attr("y", height + (margin.bottom/2)+ 5)
+	            .attr("class", "legend")    // style the legend
+	            .style("fill", function() { // Add the colours dynamically
+	                return d.color = color(d.year); })
+	            .on("click", function(){
+	                // Determine if current line is visible
+	                var active   = d.active ? false : true,
+	                newOpacity = active ? 0 : 1;
+	                // Hide or show the elements based on the ID
+	                d3.select("#tag"+d.key.replace(/\s+/g, ''))
+	                    .transition().duration(100)
+	                    .style("opacity", newOpacity);
+	                // Update whether or not the elements are active
+	                d.active = active;
+	                })
+	            .text(d.year);
+
+	    });
+        // // Add the average path.
+        // svg.append("path")
+        //     .data([data])
+        //     .attr("class", "line")
+        //     .style("stroke", "blue")
+        //     .attr("d", average);
+
+        // // add the area
+        // svg.append("path")
+        //     .data([data])
+        //     .attr("class", "area")
+        //     .style("fill", "blue")
+        //     .style("opacity", "0.4")
+        //     .attr("d", area);
+
+        // Add the X Axis
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+        // Add the Y Axis
+        svg.append("g")
+            .call(d3.axisLeft(y));
+
+		// position lines on mouseover
+		trans_rect.on("mousemove", function(){
+					  mouse = d3.mouse(this);
+					  vert_line.attr("x1", mouse[0])
+						.attr("x2", mouse[0])
+						.attr("opacity", 1);
+					  hori_line.data([data])
+					    .attr("y1", function(d, i) {
+							  return y(d[parseInt(mouse[0] * d.length / width)]
+							  			.ave_temp); })
+						.attr("y2", function(d, i) {
+							  return y(d[parseInt(mouse[0] * d.length / width)]
+							  			.ave_temp); })
+						.attr("opacity", 1);
+
+					});
+				   // .on("mouseout", function(){
+					//   vert_line.attr("opacity", 0);
+					//   hori_line.attr("opacity", 0);
+					// });
+
+
+    });
+};

@@ -14,9 +14,10 @@ import csv
 import json
 
 
-csv_input = open('C:/Users/lucst/Desktop/Minor programmeren/GitHub/Data_Processing/Homework/Datasets/KNMI_19941231.txt', 'r')
+csv_input1 = open('C:/Users/lucst/Desktop/Minor programmeren/GitHub/Data_Processing/Homework/Datasets/KNMI_19941231.txt', 'r')
+csv_input2 = open('C:/Users/lucst/Desktop/Minor programmeren/GitHub/Data_Processing/Homework/Datasets/KNMI_19941231(bilt).txt', 'r')
 
-def convert_CSV_to_JSON(csv_input):
+def convert_CSV_to_JSON(csv_input, tag):
 
     tmp_list = []
     JSON_list = []
@@ -24,22 +25,23 @@ def convert_CSV_to_JSON(csv_input):
     for line in csv_input:
         tmp_list.append(line.split(','))
 
-    title_one = str(tmp_list[0][1])
-    title_two = str(tmp_list[0][2])
-    title_thr = str(tmp_list[0][3])
-    title_fou = str(tmp_list[0][4])
+    title_one = str(tmp_list[0][1]).strip(' ').strip('\n')
+    title_two = str(tmp_list[0][2]).strip(' ').strip('\n')
+    title_thr = str(tmp_list[0][3]).strip(' ').strip('\n')
+    title_fou = str(tmp_list[0][4]).strip(' ').strip('\n')
 
     for i in range(1, len(tmp_list) - 1):
-        JSON_list.append({title_one.strip('\n') : tmp_list[i][1].strip('\n'),
-                          title_two.strip('\n') : tmp_list[i][2].strip('\n'),
-                          title_thr.strip('\n') : tmp_list[i][3].strip('\n'),
-                          title_fou.strip('\n') : tmp_list[i][4].strip('\n')})
+        JSON_list.append({"year" : tag,
+						  title_one : tmp_list[i][1].strip(' ').strip('\n'),
+                          title_two : tmp_list[i][2].strip(' ').strip('\n'),
+                          title_thr : tmp_list[i][3].strip(' ').strip('\n'),
+                          title_fou : tmp_list[i][4].strip(' ').strip('\n')})
 
-    JSON_data = json.loads(json.dumps(JSON_list))
+    return JSON_list
 
-    return JSON_data
-
-JSON_output = convert_CSV_to_JSON(csv_input)
+JSON_list1 = convert_CSV_to_JSON(csv_input1, "1994")
+JSON_list2 = convert_CSV_to_JSON(csv_input2, "2004")
+JSON_output = json.loads(json.dumps(JSON_list1 + JSON_list2))
 
 # source: https://stackoverflow.com/questions/12309269/how-do-i-write-json-data-to-a-file
 with open('C:/Users/lucst/Desktop/Minor programmeren/GitHub/Data_Processing/Homework/Week_5/KNMI_data.json', 'w') as outfile:
