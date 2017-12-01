@@ -1,26 +1,38 @@
-//
-//  d3line.js
-//
-//  Author:   L.K. Stefelmanns
-//  Course:   Data processing
-//  Study:    Minor Programming, University of Amsterdam
-//
-//  Sources:
-//	https://bl.ocks.org/basilesimon/29efb0e0a43dde81985c20d9a862e34e
-//	https://bl.ocks.org/micahstubbs/e4f5c830c264d26621b80b754219ae1b
-//	https://bl.ocks.org/d3noob/119a138ef9bd1d8f0a8d57ea72355252
+/*
+	d3line.js
+
+	Author:   L.K. Stefelmanns
+	Course:   Data processing
+	Study:    Minor Programming, University of Amsterdam
+
+	Sources:
+	https://bl.ocks.org/basilesimon/29efb0e0a43dde81985c20d9a862e34e
+	https://stackoverflow.com/questions/38687588/add-horizontal-crosshair-to-d3-js-chart
+	https://bl.ocks.org/d3noob/119a138ef9bd1d8f0a8d57ea72355252
+	http://bl.ocks.org/d3noob/e99a762017060ce81c76
+*/
 
 window.onload = function(){
 
     RESCALE = 1 / 10;
+	AREA_OPACITY = 0.2;
+	FONT_SIZE = 14
+	FONT = "Cambria";
+	TEXT_SPACE = 3 * FONT_SIZE;
+	DOT_SIZE = 5;
 
     // set the dimensions and margins of the graph
-    var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    var margin = {top: 20, right: 20, bottom: 50, left: 50},
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
     // parse the date / time
-    var parseTime = d3.timeParse("%Y%m%d");
+    var parseTime = d3.timeParse("%m%d");
+
+	// assign colors to income category with an ordinal scale
+	var color = d3.scaleOrdinal()
+		.range(["green", "blue", "red"])
+		.domain(["1901", "1962", "2016"]);
 
     // set the ranges
     var x = d3.scaleTime().range([0, width]);
@@ -37,7 +49,7 @@ window.onload = function(){
         .y0(function(d) { return y(d.min_temp); })
         .y1(function(d) { return y(d.max_temp); });
 
-    // append the svg obgect to the body of the page
+    // append the svg object to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
     var svg = d3.select("body").append("svg")
@@ -46,6 +58,33 @@ window.onload = function(){
       .append("g")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
+
+
+	// create text area for information
+	var text_info1 = svg.append("text")
+		.attr("opacity", 0)
+		.attr("class", "legend")
+		.attr("y", margin.top);
+
+	var text_info2 = svg.append("text")
+		.attr("opacity", 0)
+		.attr("class", "legend")
+		.attr("y", 2*margin.top);
+
+	// create dot for 'crosshair'
+	var dot1 = svg.append("circle")
+	    .attr("opacity", 0)
+	    .attr("stroke", "none")
+		.attr("fill", "black")
+		.attr("r", DOT_SIZE)
+	    .attr("pointer-events", "none");
+
+	var dot2 = svg.append("circle")
+	    .attr("opacity", 0)
+	    .attr("stroke", "none")
+		.attr("fill", "black")
+		.attr("r", DOT_SIZE)
+	    .attr("pointer-events", "none");
 
     // Get the data
     d3.json("KNMI_data.json", function(error, data) {
@@ -59,10 +98,11 @@ window.onload = function(){
             d.max_temp = +d.max_temp * RESCALE;
         });
 
-        // sort years ascending
-        data.sort(function(a, b){
-            return a["date"]-b["date"];
-        })
+
+		// Nest the entries by year
+		var data_nest = d3.nest()
+			.key(function(d) {return d.year;})
+			.entries(data);
 
         // Scale the range of the data
         x.domain(d3.extent(data, function(d) { return d.date; }));
@@ -71,69 +111,149 @@ window.onload = function(){
                   d3.max(data, function(d) {
                     return Math.max(d.ave_temp, d.min_temp, d.max_temp); })]);
 
+	    legendSpace = height/data_nest.length * RESCALE; // spacing for the legend
 
-		const focus = svg.append('g')
-	      .attr('class', 'focus')
-	      .style('display', 'none');
+	    // Loop through each symbol / key
+	    data_nest.forEach(function(d,i) {
 
-	    focus.append('circle')
-	      .attr('r', 4.5);
+	        svg.append("path")
+	            .attr("class", "line")
+	            .style("stroke", function() { // Add the colours dynamically
+	                return d.color = color(d.key); })
+	            .attr("id", "tag_path" + d.key) // assign ID
+	            .attr("d", average(d.values));
 
-	    focus.append('line')
-	      .classed('x', true);
+			// add the area
+	        svg.append("path")
+	            .attr("class", "area")
+	            .style("fill", function() {
+					return d.color = color(d.key);	})
+	            .style("opacity", AREA_OPACITY)
+				.attr("id", "tag_area" + d.key)
+	            .attr("d", area(d.values));
 
-	    focus.append('line')
-	      .classed('y', true);
+	        // Add the Legend
+	        svg.append("text")
+				.attr("x", 80+30*i*legendSpace)  // space legend
+				.attr("y", height + (margin.bottom/2)+ 5)
+	            .attr("class", "legend")    // style the legend
+	            .style("fill", function() { // Add the colours dynamically
+	                return d.color = color(d.key); })
+	            .on("click", function(){
+	                // Determine if current line is visible
+	                var active   = d.active ? false : true,
+	                opacity_line = active ? 0 : 1;
+	                // Hide or show the elements based on the ID
+	                d3.select("#tag_path" + d.key)
+	                    .transition().duration(100)
+	                    .style("opacity", opacity_line);
+					opacity_area = active ? 0 : AREA_OPACITY;
+					d3.select("#tag_area" + d.key)
+						.transition().duration(100)
+						.style("opacity", opacity_area)
+	                // Update whether or not the elements are active
+	                d.active = active;
+	                })
+	            .text(d.key);
+	    });
 
-	    focus.append('text')
-	      .attr('x', 9)
-	      .attr('dy', '.35em');
+		// add title
+        svg.append("text")
+                .attr("x", 5)
+                .attr("y", 10)
+                .attr("text-anchor", "left")
+                .style("font-size", "16px")
+                .text("Temperatures of coldest (1962) and warmest (2016) year");
 
-        // Add the average path.
-        svg.append("path")
-            .data([data])
-            .attr("class", "line")
-            .style("stroke", "blue")
-            .attr("d", average);
-
-        // add the area
-        svg.append("path")
-            .data([data])
-            .attr("class", "area")
-            .style("fill", "blue")
-            .style("opacity", "0.4")
-            .attr("d", area);
+        // add subtitle
+        svg.append("text")
+				.attr("x", 5)
+				.attr("y", 30)
+                .attr("text-anchor", "left")
+                .style("font-size", "16px")
+                .text("Maker: L.K. Stefelmanns Source: KNMI");
 
         // Add the X Axis
         svg.append("g")
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
+            .call(d3.axisBottom(x))
+			.attr("font", FONT);
+
+		// text label for the x axis
+	    svg.append("text")
+	        .attr("transform",
+	              "translate(" + (width/2) + " ," +
+	                             (height + margin.top + 20) + ")")
+			.attr("font", FONT)
+	        .style("text-anchor", "middle")
+	        .text("Month");
+
 
         // Add the Y Axis
         svg.append("g")
-            .call(d3.axisLeft(y));
+            .call(d3.axisLeft(y))
+			.attr("font", FONT);
 
-		function mousemove() {
-			const x0 = x.invert(d3.mouse(this)[0]);
-			const i = bisectDate(data, x0, 1);
-			const d0 = data[i - 1];
-			const d1 = data[i];
-			const d = x0 - d0.date > d1.date - x0 ? d1 : d0;
-			focus.attr('transform', `translate(${x(d.date)}, ${y(d.ave_temp)})`);
-			focus.select('line.x')
-				.attr('x1', 0)
-				.attr('x2', -x(d.date))
-				.attr('y1', 0)
-				.attr('y2', 0);
+		// text label for the y axis
+		svg.append("text")
+		    .attr("transform", "rotate(-90)")
+		    .attr("y", 0 - margin.left)
+		    .attr("x",0 - (height / 2))
+		    .attr("dy", "1em")
+			.attr("font", FONT)
+		    .style("text-anchor", "middle")
+		    .text("Temperature (celcius)");
 
-			focus.select('line.y')
-				.attr('x1', 0)
-				.attr('x2', 0)
-				.attr('y1', 0)
-				.attr('y2', height - y(d.ave_temp));
+		// create transparent rectangle to track mouse movement
+		var trans_rect = svg.append("rect")
+			.attr("x", 0)
+			.attr("y", 0)
+			.attr("width", width)
+			.attr("height", height)
+			.attr("fill", "white")
+			.attr("opacity", 0)
+			.attr("id", "overlay");
 
-			focus.select('text').text(formatCurrency(d.ave_temp));
-	    }
-	});
+		// position lines on mouseover
+		trans_rect.on("mousemove", function(){
+					  mouse = d3.mouse(this);
+					  text_info1.data([data_nest[0].values])
+					  	.attr("x", mouse[0])
+						.text(function(d) {
+								return d[parseInt(mouse[0] * d.length / width)]
+  							  			.ave_temp.toFixed(2);
+						})
+						.attr("opacity", 1)
+						.style("text-anchor", "middle")
+						.attr("fill", function(d) {
+							return color("1962");	});
+					  text_info2.data([data_nest[1].values])
+						.attr("x", mouse[0])
+						.text(function(d) {
+								return d[parseInt(mouse[0] * d.length / width)]
+										.ave_temp.toFixed(2);
+						})
+						.attr("opacity", 1)
+						.style("text-anchor", "middle")
+						.attr("fill", function(d) {
+							return color("2016");	});
+					  dot1.data([data_nest[0].values])
+					  	.attr("cx", mouse[0])
+					    .attr("cy", function(d) {
+							  return y(d[parseInt(mouse[0] * d.length / width)]
+							  			.ave_temp); })
+						.attr("opacity", 1)
+						.style("fill", function(d) {
+							return color("1962");	});
+					  dot2.data([data_nest[1].values])
+					  	.attr("cx", mouse[0])
+					    .attr("cy", function(d) {
+						  	  return y(d[parseInt(mouse[0] * d.length / width)]
+									    .ave_temp); })
+					    .attr("opacity", 1)
+						.style("fill", function(d) {
+							return color("2016");	});
+					});
 
+    });
 };

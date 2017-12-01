@@ -21,12 +21,12 @@ window.onload = function(){
         height = 500 - margin.top - margin.bottom;
 
     // parse the date / time
-    var parseTime = d3.timeParse("%Y%m%d");
+    var parseTime = d3.timeParse("%m%d");
 
 	// assign colors to income category with an ordinal scale
 	var color = d3.scaleOrdinal()
-		.range(["steelblue", "orange	"])
-		.domain(["1994", "2004"]);
+		.range(["steelblue", "orange"])
+		.domain(["1901", "2016"]);
 
     // set the ranges
     var x = d3.scaleTime().range([0, width]);
@@ -72,7 +72,15 @@ window.onload = function(){
 	    // .attr("pointer-events", "none");
 
 	// create horizontal line for crosshair
-	var hori_line = svg.append("line")
+	var hori_line1 = svg.append("line")
+	    .attr("opacity", 0)
+	    .attr("x1", 0)
+	    .attr("x2", width)
+	    .attr("stroke", "black")
+	    .attr("stroke-width", 1);
+	    // .attr("pointer-events", "none");
+
+	var hori_line2 = svg.append("line")
 	    .attr("opacity", 0)
 	    .attr("x1", 0)
 	    .attr("x2", width)
@@ -92,15 +100,16 @@ window.onload = function(){
             d.max_temp = +d.max_temp * RESCALE;
         });
 
-        // sort years ascending
-        data.sort(function(a, b){
-            return a["date"]-b["date"];
-        })
+        // // sort years ascending
+        // data.sort(function(a, b){
+        //     return a["date"]-b["date"];
+        // })
 
 		// Nest the entries by year
-		var dataNest = d3.nest()
+		var data_nest = d3.nest()
 			.key(function(d) {return d.year;})
 			.entries(data);
+		console.log(data_nest);
 
         // Scale the range of the data
         x.domain(d3.extent(data, function(d) { return d.date; }));
@@ -109,62 +118,52 @@ window.onload = function(){
                   d3.max(data, function(d) {
                     return Math.max(d.ave_temp, d.min_temp, d.max_temp); })]);
 
-	    legendSpace = width/dataNest.length; // spacing for the legend
+	    legendSpace = width/data_nest.length; // spacing for the legend
 
 	    // Loop through each symbol / key
-	    dataNest.forEach(function(d,i) {
+	    data_nest.forEach(function(d,i) {
 
 	        svg.append("path")
 	            .attr("class", "line")
 	            .style("stroke", function() { // Add the colours dynamically
-	                return d.color = color(d.year); })
-	            .attr("id", 'tag'+d.year) // assign ID
+	                return d.color = color(d.key); })
+	            .attr("id", "tag_path" + d.key) // assign ID
 	            .attr("d", average(d.values));
 
 			// add the area
 	        svg.append("path")
-	            .data([data])
 	            .attr("class", "area")
 	            .style("fill", function() {
-					return d.color = color(d.year);	})
+					return d.color = color(d.key);	})
 	            .style("opacity", "0.4")
-	            .attr("d", area);
+				.attr("id", "tag_area" + d.key)
+	            .attr("d", area(d.values));
 
 	        // Add the Legend
 	        svg.append("text")
 	            .attr("x", (legendSpace/2)+i*legendSpace)  // space legend
-	            .attr("y", height + (margin.bottom/2)+ 5)
+	            .attr("y", height + (margin.bottom/2) + 10)
 	            .attr("class", "legend")    // style the legend
 	            .style("fill", function() { // Add the colours dynamically
-	                return d.color = color(d.year); })
+	                return d.color = color(d.key); })
 	            .on("click", function(){
 	                // Determine if current line is visible
 	                var active   = d.active ? false : true,
-	                newOpacity = active ? 0 : 1;
+	                opacity_line = active ? 0 : 1;
 	                // Hide or show the elements based on the ID
-	                d3.select("#tag"+d.key.replace(/\s+/g, ''))
+	                d3.select("#tag_path" + d.key)
 	                    .transition().duration(100)
-	                    .style("opacity", newOpacity);
+	                    .style("opacity", opacity_line);
+					opacity_area = active ? 0 : 0.2;
+					d3.select("#tag_area" + d.key)
+						.transition().duration(100)
+						.style("opacity", opacity_area)
 	                // Update whether or not the elements are active
 	                d.active = active;
 	                })
-	            .text(d.year);
+	            .text(d.key);
 
 	    });
-        // // Add the average path.
-        // svg.append("path")
-        //     .data([data])
-        //     .attr("class", "line")
-        //     .style("stroke", "blue")
-        //     .attr("d", average);
-
-        // // add the area
-        // svg.append("path")
-        //     .data([data])
-        //     .attr("class", "area")
-        //     .style("fill", "blue")
-        //     .style("opacity", "0.4")
-        //     .attr("d", area);
 
         // Add the X Axis
         svg.append("g")
@@ -181,19 +180,30 @@ window.onload = function(){
 					  vert_line.attr("x1", mouse[0])
 						.attr("x2", mouse[0])
 						.attr("opacity", 1);
-					  hori_line.data([data])
-					    .attr("y1", function(d, i) {
+					  hori_line1.data([data_nest[0]["values"]])
+					  	.attr("x2", mouse[0])
+					    .attr("y1", function(d) {
 							  return y(d[parseInt(mouse[0] * d.length / width)]
 							  			.ave_temp); })
-						.attr("y2", function(d, i) {
+						.attr("y2", function(d) {
 							  return y(d[parseInt(mouse[0] * d.length / width)]
 							  			.ave_temp); })
 						.attr("opacity", 1);
+					  hori_line2.data([data_nest[1]["values"]])
+					  	.attr("x2", mouse[0])
+					    .attr("y1", function(d, i) {
+						  	  return y(d[parseInt(mouse[0] * d.length / width)]
+									    .ave_temp); })
+					    .attr("y2", function(d, i) {
+							  return y(d[parseInt(mouse[0] * d.length / width)]
+										.ave_temp); })
+					    .attr("opacity", 1);
 
 					});
 				   // .on("mouseout", function(){
 					//   vert_line.attr("opacity", 0);
-					//   hori_line.attr("opacity", 0);
+					//   hori_line1.attr("opacity", 0);
+					//   hori_line1.attr("opacity", 0);
 					// });
 
 
