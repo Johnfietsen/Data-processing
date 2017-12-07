@@ -1,0 +1,121 @@
+Canada - Chile
+Canada - Colombia
+Canada - Costa Rica
+Canada - Honduras
+Canada - Israel
+Canada - Jordan
+Canada - Korea, Republic of
+Canada - Panama
+Canada - Peru
+Canada - Ukraine
+EU - Canada
+Brunei Darussalam - Japan
+Chile - Japan
+India - Japan
+Japan - Australia
+Japan - Indonesia
+Japan - Malaysia
+Japan - Mexico
+Japan - Mongolia
+Japan - Peru
+Japan - Philippines
+Japan - Singapore
+Japan - Switzerland
+Japan - Thailand
+Japan - Viet Nam
+Korea, Republic of - United States
+United States - Australia
+United States - Bahrain
+United States - Chile
+United States - Colombia
+United States - Israel
+United States - Jordan
+United States - Morocco
+United States - Oman
+United States - Panama
+United States - Peru
+United States - Singapore
+EU - Albania
+EU - Algeria
+EU - Andorra
+EU - Bosnia and Herzegovina
+EU - Cameroon
+EU - Canada
+EU - Central America
+EU - Chile
+EU - Colombia and Peru and Ecuador
+EU - Côte d'Ivoire
+EU - Egypt
+EU - Faroe Islands
+EU - Georgia
+EU - Ghana
+EU - Iceland
+EU - Israel
+EU - Jordan
+EU - Korea, Republic of
+EU - Lebanon
+EU - Mexico
+EU - Moldova, Republic of
+EU - Montenegro
+EU - Morocco
+EU - Norway
+EU - Palestinian Authority
+EU - Papua New Guinea / Fiji
+EU - San Marino
+EU - Serbia
+EU - South Africa
+EU - Switzerland
+EU - Liechtenstein
+EU - Syria
+EU - The former Yugoslav Republic of Macedonia
+EU - Tunisia
+EU - Turkey
+EU - Ukraine
+Australia - China
+Chile - China
+China - Costa Rica
+China - Hong Kong, China
+China - Korea, Republic of
+China - Macao, China
+China - New Zealand
+China - Singapore
+Iceland - China
+Pakistan - China
+Peru - China
+Switzerland - China
+Chile - India
+India - Afghanistan
+India - Bhutan
+India - Japan
+India - Malaysia
+India - Nepal
+India - Singapore
+India - Sri Lanka
+India - Thailand
+Korea, Republic of - India
+Argentina - Brazil
+Brazil - Uruguay
+Canada - Korea, Republic of
+China - Korea, Republic of
+EU - Korea, Republic of
+Korea, Republic of - Colombia
+Korea, Republic of - Australia
+Korea, Republic of - Chile
+Korea, Republic of - India
+Korea, Republic of - New Zealand
+Korea, Republic of - Singapore
+Korea, Republic of - Turkey
+Korea, Republic of - United States
+Korea, Republic of - Viet Nam
+Peru - Korea, Republic of
+EU - South Africa
+Australia - New Zealand
+Australia - Chile
+Australia - China
+Australia - Papua New Guinea
+Japan - Australia
+Korea, Republic of - Australia
+Malaysia - Australia
+Singapore - Australia
+Thailand - Australia
+United States - Australia
