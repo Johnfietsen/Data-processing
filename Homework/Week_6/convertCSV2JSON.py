@@ -35,12 +35,13 @@ def convert_CSV_to_JSON(csv_input):
 		del tmp_lists[del_list[i] - i]
 
 	for i in range(1, len(tmp_lists) - 1):
-		country = {}
 
-		for j in range(len(tmp_lists[i]) - 1):
-			country[tmp_lists[0][j].strip('\"')] = tmp_lists[i][j].strip('\"')
-
-		JSON_list.append(country)
+		for j in range(5, len(tmp_lists[i]) - 1):
+			GDP_growth = {}
+			GDP_growth[tmp_lists[0][0].strip('\"').strip('\n')] = tmp_lists[i][0].strip('\"').strip('\n')
+			GDP_growth['year'] = tmp_lists[0][j].strip('\"').strip('\n')
+			GDP_growth['GDP_growth'] = tmp_lists[i][j].strip('\"').strip('\n')
+			JSON_list.append(GDP_growth)
 
     # dumps and loads to create JSOn file
 	JSON_data = json.loads(json.dumps(JSON_list))

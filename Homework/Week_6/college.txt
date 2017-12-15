@@ -1,0 +1,20 @@
+validator gebruiken die errors geeft
+
+h2 elementen altijd in forceManyBody
+in head alleen meta, link, script en style
+
+kan maar 1 id geven
+
+mooi mapjes werken
+mapje data, html in main
+style mapje, script mapje
+
+eigen dingen in camelCase
+
+"use strict";
+bovenaan de file zorgt ervoor dat alles strict wordt genomen
+
+zorg dat elke functie maar 1 ding doet
+zo min mogelijk globale variabelen
+
+check stap zeven op data.mprog

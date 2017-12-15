@@ -4,11 +4,11 @@ Canada - Costa Rica
 Canada - Honduras
 Canada - Israel
 Canada - Jordan
-Canada - Korea, Republic of
+Canada - South Korea
 Canada - Panama
 Canada - Peru
 Canada - Ukraine
-EU - Canada
+European Union - Canada
 Brunei Darussalam - Japan
 Chile - Japan
 India - Japan
@@ -22,8 +22,8 @@ Japan - Philippines
 Japan - Singapore
 Japan - Switzerland
 Japan - Thailand
-Japan - Viet Nam
-Korea, Republic of - United States
+Japan - Vietnam
+South Korea - United States
 United States - Australia
 United States - Bahrain
 United States - Chile
@@ -35,47 +35,47 @@ United States - Oman
 United States - Panama
 United States - Peru
 United States - Singapore
-EU - Albania
-EU - Algeria
-EU - Andorra
-EU - Bosnia and Herzegovina
-EU - Cameroon
-EU - Canada
-EU - Central America
-EU - Chile
-EU - Colombia and Peru and Ecuador
-EU - Côte d'Ivoire
-EU - Egypt
-EU - Faroe Islands
-EU - Georgia
-EU - Ghana
-EU - Iceland
-EU - Israel
-EU - Jordan
-EU - Korea, Republic of
-EU - Lebanon
-EU - Mexico
-EU - Moldova, Republic of
-EU - Montenegro
-EU - Morocco
-EU - Norway
-EU - Palestinian Authority
-EU - Papua New Guinea / Fiji
-EU - San Marino
-EU - Serbia
-EU - South Africa
-EU - Switzerland
-EU - Liechtenstein
-EU - Syria
-EU - The former Yugoslav Republic of Macedonia
-EU - Tunisia
-EU - Turkey
-EU - Ukraine
+European Union - Albania
+European Union - Algeria
+European Union - Andorra
+European Union - Bosnia and Herzegovina
+European Union - Cameroon
+European Union - Canada
+European Union - Chile
+European Union - Colombia
+European Union - Peru
+European Union - Ecuador
+European Union - Egypt
+European Union - Faroe Islands
+European Union - Georgia
+European Union - Ghana
+European Union - Iceland
+European Union - Israel
+European Union - Jordan
+European Union - South Korea
+European Union - Lebanon
+European Union - Mexico
+European Union - Moldova
+European Union - Montenegro
+European Union - Morocco
+European Union - Norway
+European Union - Palestinian Authority
+European Union - Papua New Guinea
+European Union - San Marino
+European Union - Serbia
+European Union - South Africa
+European Union - Switzerland
+European Union - Liechtenstein
+European Union - Syria
+European Union - Macedonia
+European Union - Tunisia
+European Union - Turkey
+European Union - Ukraine
 Australia - China
 Chile - China
 China - Costa Rica
 China - Hong Kong, China
-China - Korea, Republic of
+China - South Korea
 China - Macao, China
 China - New Zealand
 China - Singapore
@@ -92,30 +92,39 @@ India - Nepal
 India - Singapore
 India - Sri Lanka
 India - Thailand
-Korea, Republic of - India
-Argentina - Brazil
-Brazil - Uruguay
-Canada - Korea, Republic of
-China - Korea, Republic of
-EU - Korea, Republic of
-Korea, Republic of - Colombia
-Korea, Republic of - Australia
-Korea, Republic of - Chile
-Korea, Republic of - India
-Korea, Republic of - New Zealand
-Korea, Republic of - Singapore
-Korea, Republic of - Turkey
-Korea, Republic of - United States
-Korea, Republic of - Viet Nam
-Peru - Korea, Republic of
-EU - South Africa
+South Korea - India
+Canada - South Korea
+China - South Korea
+European Union - South Korea
+South Korea - Colombia
+South Korea - Australia
+South Korea - Chile
+South Korea - India
+South Korea - New Zealand
+South Korea - Singapore
+South Korea - Turkey
+South Korea - United States
+South Korea - Vietnam
+Peru - South Korea
+European Union - South Africa
 Australia - New Zealand
 Australia - Chile
 Australia - China
 Australia - Papua New Guinea
 Japan - Australia
-Korea, Republic of - Australia
+South Korea - Australia
 Malaysia - Australia
 Singapore - Australia
 Thailand - Australia
 United States - Australia
+Chile - India
+India - Afghanistan
+India - Bhutan
+India - Japan
+India - Malaysia
+India - Nepal
+India - Singapore
+India - Sri Lanka
+India - Thailand
+South Korea - India
+MERCOSUR - India

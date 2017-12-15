@@ -17,6 +17,11 @@ var simulation = d3.forceSimulation()
     .force("center", d3.forceCenter(width / 2, height / 2));
 
 
+var colour = d3.scaleLinear()
+				.range(["#ccece6", "#005824"])
+				.domain([0, 100]);
+
+
 d3.json("RTAs.json", function(error, graph) {
   if (error) throw error;
 
@@ -66,10 +71,13 @@ d3.json("RTAs.json", function(error, graph) {
 
     node
          .attr("r", 10)
-         .style("fill", "steelblue")
+         .style("fill", function(d){ if (d.trade_ofGDP == 'Unknown') {
+			 							return "white"; }
+									 else {
+									 	return colour(d.trade_ofGDP); };})
          .style("stroke", "#969696")
          .style("stroke-width", "1px")
-         .attr("cx", function (d) { return d.x+2; })
+         .attr("cx", function(d) { return d.x+2; })
          .attr("cy", function(d) { return d.y-2; });
 
     label
